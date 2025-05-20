@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     public float gravityModifier;
     public bool gameOver = false;
     private Animator playerAnima;
+    public ParticleSystem dustParticle;
+    public ParticleSystem explosnParticle;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -25,6 +27,7 @@ public class PlayerController : MonoBehaviour
             playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isOnTheGround = false;
             playerAnima.SetTrigger("Jump_trig");
+            dustParticle.Stop();
         }
     }
 
@@ -43,6 +46,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             isOnTheGround = true;
+            dustParticle.Play();
         }
 
         // Collision with obstacle = game over, transition to death state and falling backward death type.
@@ -54,6 +58,8 @@ public class PlayerController : MonoBehaviour
             playerAnima.SetBool("Death_b", true);
             // playerAnima.SetInteger("DeathType_int", 2);
             playerAnima.SetInteger("DeathType_int", 1);
+            explosnParticle.Play();
+            dustParticle.Stop();
         }
     }
 }
